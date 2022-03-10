@@ -71,7 +71,7 @@ impl MacroCall {
 
 /// Returns an iterator of expansions that created the given span
 pub fn expn_backtrace(mut span: Span) -> impl Iterator<Item = (ExpnId, ExpnData)> {
-    std::iter::from_fn(move || {
+    iter::from_fn(move || {
         let ctxt = span.ctxt();
         if ctxt == SyntaxContext::root() {
             return None;
@@ -95,7 +95,7 @@ pub fn expn_is_local(expn: ExpnId) -> bool {
     }
     let data = expn.expn_data();
     let backtrace = expn_backtrace(data.call_site);
-    std::iter::once((expn, data))
+    iter::once((expn, data))
         .chain(backtrace)
         .find_map(|(_, data)| data.macro_def_id)
         .map_or(true, DefId::is_local)
