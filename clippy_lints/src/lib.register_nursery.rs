@@ -12,6 +12,7 @@ store.register_group(true, "clippy::nursery", Some("clippy_nursery"), vec![
     LintId::of(floating_point_arithmetic::SUBOPTIMAL_FLOPS),
     LintId::of(future_not_send::FUTURE_NOT_SEND),
     LintId::of(index_refutable_slice::INDEX_REFUTABLE_SLICE),
+    LintId::of(inline_format_args::INLINE_FORMAT_ARGS),
     LintId::of(let_if_seq::USELESS_LET_IF_SEQ),
     LintId::of(matches::SIGNIFICANT_DROP_IN_SCRUTINEE),
     LintId::of(methods::ITER_ON_EMPTY_COLLECTIONS),

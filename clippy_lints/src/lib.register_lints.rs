@@ -193,6 +193,7 @@ store.register_lints(&[
     inherent_to_string::INHERENT_TO_STRING_SHADOW_DISPLAY,
     init_numbered_fields::INIT_NUMBERED_FIELDS,
     inline_fn_without_body::INLINE_FN_WITHOUT_BODY,
+    inline_format_args::INLINE_FORMAT_ARGS,
     int_plus_one::INT_PLUS_ONE,
     invalid_upcast_comparisons::INVALID_UPCAST_COMPARISONS,
     invalid_utf8_in_unchecked::INVALID_UTF8_IN_UNCHECKED,

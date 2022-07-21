@@ -246,6 +246,7 @@ mod inherent_impl;
 mod inherent_to_string;
 mod init_numbered_fields;
 mod inline_fn_without_body;
+mod inline_format_args;
 mod int_plus_one;
 mod invalid_upcast_comparisons;
 mod invalid_utf8_in_unchecked;
@@ -899,6 +900,7 @@ pub fn register_plugins(store: &mut rustc_lint::LintStore, sess: &Session, conf:
     store.register_late_pass(|| Box::new(manual_string_new::ManualStringNew));
     store.register_late_pass(|| Box::new(unused_peekable::UnusedPeekable));
     store.register_early_pass(|| Box::new(multi_assignments::MultiAssignments));
+    store.register_late_pass(|| Box::new(inline_format_args::InlineFormatArgs));
     // add lints here, do not remove this comment, it's used in `new_lint`
 }
 
