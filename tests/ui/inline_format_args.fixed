@@ -80,6 +80,7 @@ fn tester(fn_arg: i32) {
     println!("{:0$.1$}", width, prec);
     println!("{:0$.w$}", width, w = prec);
     println!("{:1$.2$}", local_value2, width, prec);
+    println!("Width = {}, value with width = {:0$}", local_value, local_value2);
     // These cases crash rustc, but they were fixed in a recent nightly
     //   https://github.com/rust-lang/rust/issues/99633
     // TODO: uncomment these once clippy switches to the 1.63+ (64+?)

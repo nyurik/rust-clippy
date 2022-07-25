@@ -44,11 +44,15 @@ impl<'tcx> LateLintPass<'tcx> for InlineFormatArgs {
                     && let Path { span, segments, .. } = path
                     && let [segment] = segments
                     && !is_aliased_format_arg(&args, i)
+                {
                     // TODO: in the future, is_aliased_format_arg should take care of this.
                     // TODO: Better yet, FormatArgsExpn should parse all components, and we expand them,
                     // but that may require code reuse from rustc format handling.
-                    && !snippet(cx, arg.span, "").contains('$')
-                {
+                    // This check cancels the entire format, not just the current argument
+                    if snippet(cx, arg.span, "").contains('$') {
+                        return;
+                    }
+
                     let c = changes.get_or_insert_with(Vec::new);
                     c.push((arg.argument_span, segment.ident.name.to_string()));
                     let arg_span = expand_past_previous_comma(cx, *span);
