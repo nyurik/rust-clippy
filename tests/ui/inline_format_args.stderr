@@ -1,65 +1,65 @@
-error: REPLACE ME
+error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:21:5
    |
 LL |     println!("val='{}'", local_value);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
    = note: `-D clippy::inline-format-args` implied by `-D warnings`
-help: some interesting message
+help: change this to
    |
 LL -     println!("val='{}'", local_value);
 LL +     println!("val='{local_value}'");
    |
 
-error: REPLACE ME
+error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:22:5
    |
 LL |     println!("val='{   }'", local_value);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
-help: some interesting message
+help: change this to
    |
 LL -     println!("val='{   }'", local_value);
 LL +     println!("val='{local_value}'");
    |
 
-error: REPLACE ME
+error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:23:5
    |
 LL |     println!("val='{    }'", local_value);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
-help: some interesting message
+help: change this to
    |
 LL -     println!("val='{    }'", local_value);
 LL +     println!("val='{local_value}'");
    |
 
-error: REPLACE ME
+error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:24:5
    |
 LL |     println!("val='{     }'", local_value);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
-help: some interesting message
+help: change this to
    |
 LL -     println!("val='{     }'", local_value);
 LL +     println!("val='{local_value}'");
    |
 
-error: REPLACE ME
+error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:25:5
    |
 LL |     println!("val='{     }'", local_value);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
-help: some interesting message
+help: change this to
    |
 LL -     println!("val='{     }'", local_value);
 LL +     println!("val='{local_value}'");
    |
 
-error: REPLACE ME
+error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:28:5
    |
 LL | /     println!(
@@ -69,287 +69,179 @@ LL | |         local_value
 LL | |     );
    | |_____^
    |
-help: some interesting message
+help: change this to
    |
 LL -         "val='{
 LL +         "val='{local_value}'"
    |
 
-error: REPLACE ME
+error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:35:5
    |
 LL |     println!("{}", local_value);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
-help: some interesting message
+help: change this to
    |
 LL -     println!("{}", local_value);
 LL +     println!("{local_value}");
    |
 
-error: REPLACE ME
+error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:36:5
    |
 LL |     println!("{}", fn_arg);
    |     ^^^^^^^^^^^^^^^^^^^^^^
    |
-help: some interesting message
+help: change this to
    |
 LL -     println!("{}", fn_arg);
 LL +     println!("{fn_arg}");
    |
 
-error: REPLACE ME
+error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:37:5
    |
 LL |     println!("{:?}", local_value);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
-help: some interesting message
+help: change this to
    |
 LL -     println!("{:?}", local_value);
 LL +     println!("{local_value:?}");
    |
 
-error: REPLACE ME
+error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:38:5
    |
 LL |     println!("{:#?}", local_value);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
-help: some interesting message
+help: change this to
    |
 LL -     println!("{:#?}", local_value);
 LL +     println!("{local_value:#?}");
    |
 
-error: REPLACE ME
+error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:39:5
    |
 LL |     println!("{:4}", local_value);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
-help: some interesting message
+help: change this to
    |
 LL -     println!("{:4}", local_value);
 LL +     println!("{local_value:4}");
    |
 
-error: REPLACE ME
+error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:40:5
    |
 LL |     println!("{:04}", local_value);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
-help: some interesting message
+help: change this to
    |
 LL -     println!("{:04}", local_value);
 LL +     println!("{local_value:04}");
    |
 
-error: REPLACE ME
+error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:41:5
    |
 LL |     println!("{:<3}", local_value);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
-help: some interesting message
+help: change this to
    |
 LL -     println!("{:<3}", local_value);
 LL +     println!("{local_value:<3}");
    |
 
-error: REPLACE ME
+error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:42:5
    |
 LL |     println!("{:#010x}", local_value);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
-help: some interesting message
+help: change this to
    |
 LL -     println!("{:#010x}", local_value);
 LL +     println!("{local_value:#010x}");
    |
 
-error: REPLACE ME
+error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:43:5
    |
 LL |     println!("{:.1}", local_value2);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
-help: some interesting message
+help: change this to
    |
 LL -     println!("{:.1}", local_value2);
 LL +     println!("{local_value2:.1}");
    |
 
-error: REPLACE ME
+error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:44:5
    |
 LL |     println!("Hello {} is {:.*}", "x", local_value, local_value2);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
-help: some interesting message
+help: change this to
    |
 LL -     println!("Hello {} is {:.*}", "x", local_value, local_value2);
 LL +     println!("Hello {} is {local_value2:.*}", "x", local_value);
    |
 
-error: REPLACE ME
+error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:53:5
    |
 LL |     println!("{} {}", local_value, local_value2);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
-help: some interesting message
+help: change this to
    |
 LL -     println!("{} {}", local_value, local_value2);
 LL +     println!("{local_value} {local_value2}");
    |
 
-error: REPLACE ME
+error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:59:5
    |
 LL |     println!("{}, {}", local_value, local_opt.unwrap());
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
-help: some interesting message
+help: change this to
    |
 LL -     println!("{}, {}", local_value, local_opt.unwrap());
 LL +     println!("{local_value}, {}", local_opt.unwrap());
    |
 
-error: REPLACE ME
-  --> $DIR/inline_format_args.rs:66:5
-   |
-LL |     println!("{:0$}", width);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^
-   |
-help: some interesting message
-   |
-LL -     println!("{:0$}", width);
-LL +     println!("{width:0$}");
-   |
-
-error: REPLACE ME
+error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:67:5
    |
 LL |     println!("{}", val);
    |     ^^^^^^^^^^^^^^^^^^^
    |
-help: some interesting message
+help: change this to
    |
 LL -     println!("{}", val);
 LL +     println!("{val}");
    |
 
-error: REPLACE ME
+error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:68:5
    |
 LL |     println!("{}", v = val);
    |     ^^^^^^^^^^^^^^^^^^^^^^^
    |
-help: some interesting message
+help: change this to
    |
 LL -     println!("{}", v = val);
 LL +     println!("{val}");
    |
 
-error: REPLACE ME
-  --> $DIR/inline_format_args.rs:69:5
-   |
-LL |     println!("{:0$}", v = val);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
-   |
-help: some interesting message
-   |
-LL -     println!("{:0$}", v = val);
-LL +     println!("{val:0$}");
-   |
-
-error: REPLACE ME
-  --> $DIR/inline_format_args.rs:71:5
-   |
-LL |     println!("{:0$.0$}", v = val);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   |
-help: some interesting message
-   |
-LL -     println!("{:0$.0$}", v = val);
-LL +     println!("{val:0$.0$}");
-   |
-
-error: REPLACE ME
-  --> $DIR/inline_format_args.rs:79:5
-   |
-LL |     println!("{:w$}", w = width);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   |
-help: some interesting message
-   |
-LL -     println!("{:w$}", w = width);
-LL +     println!("{width:w$}");
-   |
-
-error: REPLACE ME
-  --> $DIR/inline_format_args.rs:80:5
-   |
-LL |     println!("{:.0$}", prec);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^
-   |
-help: some interesting message
-   |
-LL -     println!("{:.0$}", prec);
-LL +     println!("{prec:.0$}");
-   |
-
-error: REPLACE ME
-  --> $DIR/inline_format_args.rs:81:5
-   |
-LL |     println!("{:.p$}", p = prec);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   |
-help: some interesting message
-   |
-LL -     println!("{:.p$}", p = prec);
-LL +     println!("{prec:.p$}");
-   |
-
-error: REPLACE ME
-  --> $DIR/inline_format_args.rs:82:5
-   |
-LL |     println!("{:0$.1$}", width, prec);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   |
-help: some interesting message
-   |
-LL -     println!("{:0$.1$}", width, prec);
-LL +     println!("{width:0$.1$}", prec);
-   |
-
-error: REPLACE ME
-  --> $DIR/inline_format_args.rs:83:5
-   |
-LL |     println!("{:0$.w$}", width, w = prec);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   |
-help: some interesting message
-   |
-LL -     println!("{:0$.w$}", width, w = prec);
-LL +     println!("{width:0$.w$}", w = prec);
-   |
-
-error: REPLACE ME
-  --> $DIR/inline_format_args.rs:84:5
-   |
-LL |     println!("{:1$.2$}", local_value2, width, prec);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   |
-help: some interesting message
-   |
-LL -     println!("{:1$.2$}", local_value2, width, prec);
-LL +     println!("{local_value2:1$.2$}", width, prec);
-   |
-
-error: aborting due to 29 previous errors
+error: aborting due to 20 previous errors
 

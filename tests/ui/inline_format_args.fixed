@@ -61,12 +61,12 @@ fn tester(fn_arg: i32) {
     println!("{local_value:w$}", w = width);
     println!("{local_value:.0$}", prec);
     println!("{local_value:.p$}", p = prec);
-    println!("{width:0$}");
+    println!("{:0$}", width);
     println!("{val}");
     println!("{val}");
-    println!("{val:0$}");
+    println!("{:0$}", v = val);
     println!("{0:0$}", v = val);
-    println!("{val:0$.0$}");
+    println!("{:0$.0$}", v = val);
     println!("{0:0$.0$}", v = val);
     println!("{0:0$.v$}", v = val);
     println!("{0:v$.0$}", v = val);
@@ -74,12 +74,12 @@ fn tester(fn_arg: i32) {
     println!("{v:v$.0$}", v = val);
     println!("{v:0$.v$}", v = val);
     println!("{v:v$.v$}", v = val);
-    println!("{width:w$}");
-    println!("{prec:.0$}");
-    println!("{prec:.p$}");
-    println!("{width:0$.1$}", prec);
-    println!("{width:0$.w$}", w = prec);
-    println!("{local_value2:1$.2$}", width, prec);
+    println!("{:w$}", w = width);
+    println!("{:.0$}", prec);
+    println!("{:.p$}", p = prec);
+    println!("{:0$.1$}", width, prec);
+    println!("{:0$.w$}", width, w = prec);
+    println!("{:1$.2$}", local_value2, width, prec);
     // These cases crash rustc, but they were fixed in a recent nightly
     //   https://github.com/rust-lang/rust/issues/99633
     // TODO: uncomment these once clippy switches to the 1.63+ (64+?)
