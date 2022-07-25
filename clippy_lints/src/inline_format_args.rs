@@ -49,7 +49,7 @@ impl<'tcx> LateLintPass<'tcx> for InlineFormatArgs {
                     // but that may require code reuse from rustc format handling.
                     && !snippet(cx, arg.span, "").contains('$')
                 {
-                    let c = changes.get_or_insert_with(|| vec![]);
+                    let c = changes.get_or_insert_with(Vec::new);
                     c.push((arg.argument_span, segment.ident.name.to_string()));
                     let arg_span = expand_past_previous_comma(cx, *span);
                     c.push((arg_span, "".to_string()));
