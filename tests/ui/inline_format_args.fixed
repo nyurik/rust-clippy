@@ -87,12 +87,13 @@ fn tester(fn_arg: i32) {
     // println!("{:p$.w$}", p = width, w = prec);
     println!("{}", format!("{}", local_value));
 
-    // Should not be changed
+    // wouldn't be modified by the lint
     println!(concat!("nope ", "{}"), local_value);
     println!("val='{local_value}'");
     println!("val='{local_value }'");
     println!("val='{local_value	}'"); // with tab
     println!("val='{local_value\n}'");
+    println!("{}", usize::MAX);
     println!(
         "val='{local_value
     }'"
