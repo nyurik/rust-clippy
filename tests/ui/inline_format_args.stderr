@@ -62,18 +62,21 @@ LL +     println!("val='{local_value}'");
 error: REPLACE ME
   --> $DIR/inline_format_args.rs:28:5
    |
-LL | /     println!("val='{
-LL | |     }'", local_value);
-   | |_____________________^
+LL | /     println!(
+LL | |         "val='{
+LL | |     }'",
+LL | |         local_value
+LL | |     );
+   | |_____^
    |
 help: some interesting message
    |
-LL -     println!("val='{
-LL +     println!("val='{local_value}'");
+LL -         "val='{
+LL +         "val='{local_value}'"
    |
 
 error: REPLACE ME
-  --> $DIR/inline_format_args.rs:32:5
+  --> $DIR/inline_format_args.rs:35:5
    |
 LL |     println!("{}", local_value);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -85,7 +88,7 @@ LL +     println!("{local_value}");
    |
 
 error: REPLACE ME
-  --> $DIR/inline_format_args.rs:33:5
+  --> $DIR/inline_format_args.rs:36:5
    |
 LL |     println!("{}", fn_arg);
    |     ^^^^^^^^^^^^^^^^^^^^^^
@@ -97,7 +100,7 @@ LL +     println!("{fn_arg}");
    |
 
 error: REPLACE ME
-  --> $DIR/inline_format_args.rs:34:5
+  --> $DIR/inline_format_args.rs:37:5
    |
 LL |     println!("{:?}", local_value);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -109,7 +112,7 @@ LL +     println!("{local_value:?}");
    |
 
 error: REPLACE ME
-  --> $DIR/inline_format_args.rs:35:5
+  --> $DIR/inline_format_args.rs:38:5
    |
 LL |     println!("{:#?}", local_value);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -121,7 +124,7 @@ LL +     println!("{local_value:#?}");
    |
 
 error: REPLACE ME
-  --> $DIR/inline_format_args.rs:36:5
+  --> $DIR/inline_format_args.rs:39:5
    |
 LL |     println!("{:4}", local_value);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -133,7 +136,7 @@ LL +     println!("{local_value:4}");
    |
 
 error: REPLACE ME
-  --> $DIR/inline_format_args.rs:37:5
+  --> $DIR/inline_format_args.rs:40:5
    |
 LL |     println!("{:04}", local_value);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -145,7 +148,7 @@ LL +     println!("{local_value:04}");
    |
 
 error: REPLACE ME
-  --> $DIR/inline_format_args.rs:38:5
+  --> $DIR/inline_format_args.rs:41:5
    |
 LL |     println!("{:<3}", local_value);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -157,7 +160,7 @@ LL +     println!("{local_value:<3}");
    |
 
 error: REPLACE ME
-  --> $DIR/inline_format_args.rs:39:5
+  --> $DIR/inline_format_args.rs:42:5
    |
 LL |     println!("{:#010x}", local_value);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -169,7 +172,7 @@ LL +     println!("{local_value:#010x}");
    |
 
 error: REPLACE ME
-  --> $DIR/inline_format_args.rs:40:5
+  --> $DIR/inline_format_args.rs:43:5
    |
 LL |     println!("{:.1}", local_value2);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -181,7 +184,7 @@ LL +     println!("{local_value2:.1}");
    |
 
 error: REPLACE ME
-  --> $DIR/inline_format_args.rs:41:5
+  --> $DIR/inline_format_args.rs:44:5
    |
 LL |     println!("Hello {} is {:.*}", "x", local_value, local_value2);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -193,7 +196,7 @@ LL +     println!("Hello {} is {local_value2:.*}", "x", local_value);
    |
 
 error: REPLACE ME
-  --> $DIR/inline_format_args.rs:50:5
+  --> $DIR/inline_format_args.rs:53:5
    |
 LL |     println!("{} {}", local_value, local_value2);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -205,7 +208,7 @@ LL +     println!("{local_value} {local_value2}");
    |
 
 error: REPLACE ME
-  --> $DIR/inline_format_args.rs:56:5
+  --> $DIR/inline_format_args.rs:59:5
    |
 LL |     println!("{}, {}", local_value, local_opt.unwrap());
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -217,7 +220,7 @@ LL +     println!("{local_value}, {}", local_opt.unwrap());
    |
 
 error: REPLACE ME
-  --> $DIR/inline_format_args.rs:63:5
+  --> $DIR/inline_format_args.rs:66:5
    |
 LL |     println!("{:0$}", width);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -229,7 +232,7 @@ LL +     println!("{width:0$}");
    |
 
 error: REPLACE ME
-  --> $DIR/inline_format_args.rs:64:5
+  --> $DIR/inline_format_args.rs:67:5
    |
 LL |     println!("{}", val);
    |     ^^^^^^^^^^^^^^^^^^^
@@ -241,7 +244,7 @@ LL +     println!("{val}");
    |
 
 error: REPLACE ME
-  --> $DIR/inline_format_args.rs:65:5
+  --> $DIR/inline_format_args.rs:68:5
    |
 LL |     println!("{}", v = val);
    |     ^^^^^^^^^^^^^^^^^^^^^^^
@@ -253,7 +256,7 @@ LL +     println!("{val}");
    |
 
 error: REPLACE ME
-  --> $DIR/inline_format_args.rs:66:5
+  --> $DIR/inline_format_args.rs:69:5
    |
 LL |     println!("{:0$}", v = val);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -265,7 +268,7 @@ LL +     println!("{val:0$}");
    |
 
 error: REPLACE ME
-  --> $DIR/inline_format_args.rs:68:5
+  --> $DIR/inline_format_args.rs:71:5
    |
 LL |     println!("{:0$.0$}", v = val);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -277,7 +280,7 @@ LL +     println!("{val:0$.0$}");
    |
 
 error: REPLACE ME
-  --> $DIR/inline_format_args.rs:76:5
+  --> $DIR/inline_format_args.rs:79:5
    |
 LL |     println!("{:w$}", w = width);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -289,7 +292,7 @@ LL +     println!("{width:w$}");
    |
 
 error: REPLACE ME
-  --> $DIR/inline_format_args.rs:77:5
+  --> $DIR/inline_format_args.rs:80:5
    |
 LL |     println!("{:.0$}", prec);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -301,7 +304,7 @@ LL +     println!("{prec:.0$}");
    |
 
 error: REPLACE ME
-  --> $DIR/inline_format_args.rs:78:5
+  --> $DIR/inline_format_args.rs:81:5
    |
 LL |     println!("{:.p$}", p = prec);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -313,7 +316,7 @@ LL +     println!("{prec:.p$}");
    |
 
 error: REPLACE ME
-  --> $DIR/inline_format_args.rs:79:5
+  --> $DIR/inline_format_args.rs:82:5
    |
 LL |     println!("{:0$.1$}", width, prec);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -325,7 +328,7 @@ LL +     println!("{width:0$.1$}", prec);
    |
 
 error: REPLACE ME
-  --> $DIR/inline_format_args.rs:80:5
+  --> $DIR/inline_format_args.rs:83:5
    |
 LL |     println!("{:0$.w$}", width, w = prec);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -337,7 +340,7 @@ LL +     println!("{width:0$.w$}", w = prec);
    |
 
 error: REPLACE ME
-  --> $DIR/inline_format_args.rs:81:5
+  --> $DIR/inline_format_args.rs:84:5
    |
 LL |     println!("{:1$.2$}", local_value2, width, prec);
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -349,3 +352,4 @@ LL +     println!("{local_value2:1$.2$}", width, prec);
    |
 
 error: aborting due to 29 previous errors
+

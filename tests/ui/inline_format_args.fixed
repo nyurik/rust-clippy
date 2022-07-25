@@ -10,7 +10,7 @@
 fn tester(fn_arg: i32) {
     let local_value = 1;
     let local_value2 = 2.0;
-    let local_opt:Option<i32> = Some(3);
+    let local_opt: Option<i32> = Some(3);
     let width = 4;
     let prec = 5;
     let val = 6;
@@ -25,9 +25,11 @@ fn tester(fn_arg: i32) {
     println!("val='{local_value}'");
     println!("val='{\t }'", local_value);
     println!("val='{\n }'", local_value);
-    println!("val='{local_value}'");
-    println!("val='{local_value}'", local_value=local_value);
-    println!("val='{local_value}'", local_value=fn_arg);
+    println!(
+        "val='{local_value}'"
+    );
+    println!("val='{local_value}'", local_value = local_value);
+    println!("val='{local_value}'", local_value = fn_arg);
     println!("{local_value}");
     println!("{fn_arg}");
     println!("{local_value:?}");
@@ -89,10 +91,12 @@ fn tester(fn_arg: i32) {
     println!(concat!("nope ", "{}"), local_value);
     println!("val='{local_value}'");
     println!("val='{local_value }'");
-    println!("val='{local_value	}'");  // with tab
+    println!("val='{local_value	}'"); // with tab
     println!("val='{local_value\n}'");
-    println!("val='{local_value
-    }'");
+    println!(
+        "val='{local_value
+    }'"
+    );
 }
 
 fn main() {
