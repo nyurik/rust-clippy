@@ -872,6 +872,15 @@ impl<'tcx> FormatArgsExpn<'tcx> {
     }
 }
 
+/// Returns true if `args[i]` "refers to" or "is referred to by" another argument.
+/// FIXME: this is not catching cases when a value is used as precision or width argument.
+pub fn is_aliased_format_arg(args: &[FormatArgsArg<'_>], i: usize) -> bool {
+    let value = args[i].value;
+    args.iter()
+        .enumerate()
+        .any(|(j, arg)| i != j && std::ptr::eq(value, arg.value))
+}
+
 /// A node with a `HirId` and a `Span`
 pub trait HirNode {
     fn hir_id(&self) -> HirId;
