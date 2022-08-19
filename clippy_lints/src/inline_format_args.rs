@@ -9,16 +9,20 @@ use rustc_session::{declare_lint_pass, declare_tool_lint};
 
 declare_clippy_lint! {
     /// ### What it does
+    /// Inline simple format arguments in the format string.
     ///
     /// ### Why is this bad?
+    /// Non-inlined code is slightly more difficult to read and understand,
+    /// as it requires arguments to be matched against the format string.
+    /// The inlined syntax, where allowed, is simpler.
     ///
     /// ### Example
     /// ```rust
-    /// // example code where clippy issues a warning
+    /// format!("{}", foo);
     /// ```
     /// Use instead:
     /// ```rust
-    /// // example code which does not raise clippy warning
+    /// format!("{foo}");
     /// ```
     #[clippy::version = "1.64.0"]
     pub INLINE_FORMAT_ARGS,
