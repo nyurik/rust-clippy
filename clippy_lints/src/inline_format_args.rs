@@ -9,7 +9,8 @@ use rustc_session::{declare_lint_pass, declare_tool_lint};
 
 declare_clippy_lint! {
     /// ### What it does
-    /// Inline simple format arguments in the format string.
+    /// Detect when a variable is not inlined in a format string,
+    /// and suggests to inline it.
     ///
     /// ### Why is this bad?
     /// Non-inlined code is slightly more difficult to read and understand,
@@ -27,7 +28,7 @@ declare_clippy_lint! {
     #[clippy::version = "1.64.0"]
     pub INLINE_FORMAT_ARGS,
     nursery,
-    "inline variables in `format!` calls"
+    "using non-inlined variables in `format!` calls"
 }
 declare_lint_pass!(InlineFormatArgs => [INLINE_FORMAT_ARGS]);
 
