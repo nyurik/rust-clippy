@@ -1,7 +1,8 @@
+// use std::path::Path;
 use clippy_utils::diagnostics::{span_lint_and_sugg, span_lint_and_then};
 use clippy_utils::is_diag_trait_item;
-use clippy_utils::macros::{is_format_macro, FormatArgsExpn};
-use clippy_utils::source::snippet_opt;
+use clippy_utils::macros::{is_format_macro, FormatArgsExpn, FormatArg};
+use clippy_utils::source::{expand_past_previous_comma, snippet, snippet_opt};
 use clippy_utils::ty::implements_trait;
 use if_chain::if_chain;
 use itertools::Itertools;
@@ -64,7 +65,31 @@ declare_clippy_lint! {
     "`to_string` applied to a type that implements `Display` in format args"
 }
 
-declare_lint_pass!(FormatArgs => [FORMAT_IN_FORMAT_ARGS, TO_STRING_IN_FORMAT_ARGS]);
+declare_clippy_lint! {
+    /// ### What it does
+    /// Detect when a variable is not inlined in a format string,
+    /// and suggests to inline it.
+    ///
+    /// ### Why is this bad?
+    /// Non-inlined code is slightly more difficult to read and understand,
+    /// as it requires arguments to be matched against the format string.
+    /// The inlined syntax, where allowed, is simpler.
+    ///
+    /// ### Example
+    /// ```rust
+    /// format!("{}", foo);
+    /// ```
+    /// Use instead:
+    /// ```rust
+    /// format!("{foo}");
+    /// ```
+    #[clippy::version = "1.64.0"]
+    pub INLINE_FORMAT_ARGS,
+    nursery,
+    "using non-inlined variables in `format!` calls"
+}
+
+declare_lint_pass!(FormatArgs => [FORMAT_IN_FORMAT_ARGS, TO_STRING_IN_FORMAT_ARGS, INLINE_FORMAT_ARGS]);
 
 impl<'tcx> LateLintPass<'tcx> for FormatArgs {
     fn check_expr(&mut self, cx: &LateContext<'tcx>, expr: &'tcx Expr<'tcx>) {
@@ -76,6 +101,7 @@ impl<'tcx> LateLintPass<'tcx> for FormatArgs {
             if is_format_macro(cx, macro_def_id);
             if let ExpnKind::Macro(_, name) = outermost_expn_data.kind;
             then {
+                let mut changes = None;
                 for arg in &format_args.args {
                     if !arg.format.is_default() {
                         continue;
@@ -83,12 +109,38 @@ impl<'tcx> LateLintPass<'tcx> for FormatArgs {
                     if is_aliased(&format_args, arg.param.value.hir_id) {
                         continue;
                     }
+                    check_inline(cx, &arg, &mut changes);
                     check_format_in_format_args(cx, outermost_expn_data.call_site, name, arg.param.value);
                     check_to_string_in_format_args(cx, name, arg.param.value);
                 }
             }
         }
     }
+
+
+}
+
+fn check_inline(cx: &LateContext<'_>, arg: &FormatArg<'_>, changes: &mut Option<Vec<Span>>) {
+    println!("ARG: {:#?}", arg.param.value);
+    // if (arg.argument_span.is_empty() || snippet(cx, arg.argument_span, "").trim_end().is_empty())
+    //     && let ExprKind::Path(QPath::Resolved(None, path)) = arg.value.kind
+    //     && let Path { span, segments, .. } = path
+    //     && let [segment] = segments
+    //     && !is_aliased_format_arg(&args, i)
+    // {
+    //     // TODO: in the future, is_aliased_format_arg should take care of this.
+    //     // TODO: Better yet, FormatArgsExpn should parse all components, and we expand them,
+    //     // but that may require code reuse from rustc format handling.
+    //     // This check cancels the entire format, not just the current argument
+    //     if snippet(cx, arg.span, "").contains('$') {
+    //         return;
+    //     }
+    //
+    //     let c = changes.get_or_insert_with(Vec::new);
+    //     c.push((arg.argument_span, segment.ident.name.to_string()));
+    //     let arg_span = expand_past_previous_comma(cx, *span);
+    //     c.push((arg_span, "".to_string()));
+    // }
 }
 
 fn outermost_expn_data(expn_data: ExpnData) -> ExpnData {

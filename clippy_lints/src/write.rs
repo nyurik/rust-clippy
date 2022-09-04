@@ -1,6 +1,6 @@
 use clippy_utils::diagnostics::{span_lint, span_lint_and_then};
 use clippy_utils::macros::{root_macro_call_first_node, FormatArgsExpn, MacroCall};
-use clippy_utils::source::snippet_opt;
+use clippy_utils::source::{snippet_opt, expand_past_previous_comma};
 use rustc_ast::LitKind;
 use rustc_errors::Applicability;
 use rustc_hir::{Expr, ExprKind, HirIdMap, Impl, Item, ItemKind};
