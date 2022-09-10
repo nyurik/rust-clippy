@@ -103,13 +103,13 @@ impl<'tcx> LateLintPass<'tcx> for FormatArgs {
             then {
                 let mut changes = None;
                 for arg in &format_args.args {
-                    if !arg.format.is_default() {
-                        continue;
-                    }
                     if is_aliased(&format_args, arg.param.value.hir_id) {
                         continue;
                     }
                     check_inline(cx, &arg, &mut changes);
+                    if !arg.format.is_default() {
+                        continue;
+                    }
                     check_format_in_format_args(cx, outermost_expn_data.call_site, name, arg.param.value);
                     check_to_string_in_format_args(cx, name, arg.param.value);
                 }
@@ -121,7 +121,7 @@ impl<'tcx> LateLintPass<'tcx> for FormatArgs {
 }
 
 fn check_inline(cx: &LateContext<'_>, arg: &FormatArg<'_>, changes: &mut Option<Vec<Span>>) {
-    println!("ARG: {:#?}", arg.param.value);
+    println!("ARG: {}\n{:#?}", snippet(cx, arg.span, ""), arg.param.value);
     // if (arg.argument_span.is_empty() || snippet(cx, arg.argument_span, "").trim_end().is_empty())
     //     && let ExprKind::Path(QPath::Resolved(None, path)) = arg.value.kind
     //     && let Path { span, segments, .. } = path
