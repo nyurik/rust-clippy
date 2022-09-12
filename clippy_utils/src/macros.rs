@@ -738,7 +738,7 @@ pub struct FormatArg<'tcx> {
 pub struct FormatArgsExpn<'tcx> {
     /// The format string literal.
     pub format_string: FormatString,
-    // The format arguments, such as `{:?}`.
+    /// The format arguments, such as `{:?}`.
     pub args: Vec<FormatArg<'tcx>>,
     /// Has an added newline due to `println!()`/`writeln!()`/etc. The last format string part will
     /// include this added newline.

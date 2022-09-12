@@ -21,10 +21,10 @@ fn tester(fn_arg: i32) {
     assert_eq!("	 	", "\t \t");
 
     println!("val='{}'", local_i32);
-    println!("val='{   }'", local_i32);
-    println!("val='{	}'", local_i32);
-    println!("val='{ 	}'", local_i32);
-    println!("val='{	 }'", local_i32);
+    println!("val='{   }'", local_i32); // 3 spaces
+    println!("val='{	}'", local_i32); // tab
+    println!("val='{ 	}'", local_i32); // space+tab
+    println!("val='{	 }'", local_i32); // tab+space
     println!(
         "val='{
     }'",
@@ -40,12 +40,13 @@ fn tester(fn_arg: i32) {
     println!("{:#010x}", local_i32);
     println!("{:.1}", local_f64);
     println!("Hello {} is {:.*}", "x", local_i32, local_f64);
+    println!("Hello {} is {:.*}", local_i32, 5, local_f64);
+    println!("Hello {} is {2:.*}", local_i32, 5, local_f64);
     println!("{} {}", local_i32, local_f64);
     println!("{}, {}", local_i32, local_opt.unwrap());
     println!("{}", val);
     println!("{}", v = val);
-
-    // TODO: these cases should be handled
+    println!("{} {1}", local_i32, 42);
     println!("val='{\t }'", local_i32);
     println!("val='{\n }'", local_i32);
     println!("val='{local_i32}'", local_i32 = local_i32);
@@ -68,7 +69,6 @@ fn tester(fn_arg: i32) {
     println!("{local_i32:w$}", w = width);
     println!("{local_i32:.0$}", prec);
     println!("{local_i32:.p$}", p = prec);
-    println!("{:0$}", width);
     println!("{:0$}", v = val);
     println!("{0:0$}", v = val);
     println!("{:0$.0$}", v = val);
@@ -79,18 +79,31 @@ fn tester(fn_arg: i32) {
     println!("{v:v$.0$}", v = val);
     println!("{v:0$.v$}", v = val);
     println!("{v:v$.v$}", v = val);
+    println!("{:0$}", width);
+    println!("{:1$}", local_i32, width);
     println!("{:w$}", w = width);
+    println!("{:w$}", local_i32, w = width);
     println!("{:.0$}", prec);
+    println!("{:.1$}", local_i32, prec);
     println!("{:.p$}", p = prec);
+    println!("{:.p$}", local_i32, p = prec);
     println!("{:0$.1$}", width, prec);
     println!("{:0$.w$}", width, w = prec);
     println!("{:1$.2$}", local_f64, width, prec);
+    println!("{:1$.2$} {0} {1} {2}", local_f64, width, prec);
+    println!(
+        "{0:1$.2$} {0:2$.1$} {1:0$.2$} {1:2$.0$} {2:0$.1$} {2:1$.0$} {3}",
+        local_i32,
+        width,
+        prec,
+        1 + 2
+    );
     println!("Width = {}, value with width = {:0$}", local_i32, local_f64);
     println!("{:p$.w$}", local_i32, w = width, p = prec);
     println!("{:p$.w$}", p = width, w = prec);
     println!("{}", format!("{}", local_i32));
 
-    // wouldn't be modified by the lint
+    // these should NOT be modified by the lint
     println!(concat!("nope ", "{}"), local_i32);
     println!("val='{local_i32}'");
     println!("val='{local_i32 }'");

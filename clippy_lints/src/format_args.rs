@@ -1,13 +1,12 @@
-// use std::path::Path;
 use clippy_utils::diagnostics::{span_lint_and_sugg, span_lint_and_then};
 use clippy_utils::is_diag_trait_item;
-use clippy_utils::macros::{is_format_macro, FormatArgsExpn, FormatArg};
+use clippy_utils::macros::{is_format_macro, FormatArgsExpn, FormatArg, FormatParamKind};
 use clippy_utils::source::{expand_past_previous_comma, snippet, snippet_opt};
 use clippy_utils::ty::implements_trait;
 use if_chain::if_chain;
 use itertools::Itertools;
 use rustc_errors::Applicability;
-use rustc_hir::{Expr, ExprKind, HirId};
+use rustc_hir::{Expr, ExprKind, HirId, Path, QPath};
 use rustc_lint::{LateContext, LateLintPass};
 use rustc_middle::ty::adjustment::{Adjust, Adjustment};
 use rustc_middle::ty::Ty;
@@ -101,46 +100,75 @@ impl<'tcx> LateLintPass<'tcx> for FormatArgs {
             if is_format_macro(cx, macro_def_id);
             if let ExpnKind::Macro(_, name) = outermost_expn_data.kind;
             then {
-                let mut changes = None;
+                // if at least some of the arguments/format/precision are referenced by an index,
+                // e.g.  format!("{} {1}", foo, bar)  or  format!("{:1$}", foo, 2)
+                // we cannot remove an argument from a list until we support renumbering
+                let mut do_inline = !has_numbered(&format_args);
+                let mut inline_spans = None;
                 for arg in &format_args.args {
+
+                    /////// DEBUG, REMOVE BEFORE MERGE ///////
+                    // println!("ARG: {}\n{} -- span={}, value={}, precision={}, width={}, ty={}, trait={}\n{:#?}\n",
+                    // println!("ARG: {}\n{} -- span={}, value={}, trait={}\n{:#?}\n",
+                    //     snippet(cx, format_args.format_string.span, "(empty)"),
+                    //     snippet(cx, arg.span, "(empty)"),
+                    //     snippet(cx, arg.param.span, "(empty)"),
+                    //     snippet(cx, arg.param.value.span, "(empty)"),
+                    //     // snippet(cx, arg.param.precision_span.unwrap_or(DUMMY_SP), "(empty)"),
+                    //     // snippet(cx, arg.param.width_span.unwrap_or(DUMMY_SP), "(empty)"),
+                    //     // snippet(cx, arg.param.ty_span.unwrap_or(DUMMY_SP), "(empty)"),
+                    //     snippet(cx, arg.format.trait_span.unwrap_or(rustc_span::DUMMY_SP), "(empty)"),
+                    //     arg,
+                    // );
+
                     if is_aliased(&format_args, arg.param.value.hir_id) {
+                        do_inline = false;  // inlining doesn't support aliases (yet?)
                         continue;
                     }
-                    check_inline(cx, &arg, &mut changes);
+                    if do_inline {
+                        check_inline(cx, &arg, &mut inline_spans);
+                    }
                     if !arg.format.is_default() {
                         continue;
                     }
                     check_format_in_format_args(cx, outermost_expn_data.call_site, name, arg.param.value);
                     check_to_string_in_format_args(cx, name, arg.param.value);
                 }
+                if do_inline && let Some(inline_spans) = inline_spans  {
+                    suggest_inline(cx, outermost_expn_data.call_site, inline_spans);
+                }
             }
         }
     }
-
-
 }
 
-fn check_inline(cx: &LateContext<'_>, arg: &FormatArg<'_>, changes: &mut Option<Vec<Span>>) {
-    println!("ARG: {}\n{:#?}", snippet(cx, arg.span, ""), arg.param.value);
-    // if (arg.argument_span.is_empty() || snippet(cx, arg.argument_span, "").trim_end().is_empty())
-    //     && let ExprKind::Path(QPath::Resolved(None, path)) = arg.value.kind
-    //     && let Path { span, segments, .. } = path
-    //     && let [segment] = segments
-    //     && !is_aliased_format_arg(&args, i)
-    // {
-    //     // TODO: in the future, is_aliased_format_arg should take care of this.
-    //     // TODO: Better yet, FormatArgsExpn should parse all components, and we expand them,
-    //     // but that may require code reuse from rustc format handling.
-    //     // This check cancels the entire format, not just the current argument
-    //     if snippet(cx, arg.span, "").contains('$') {
-    //         return;
-    //     }
-    //
-    //     let c = changes.get_or_insert_with(Vec::new);
-    //     c.push((arg.argument_span, segment.ident.name.to_string()));
-    //     let arg_span = expand_past_previous_comma(cx, *span);
-    //     c.push((arg_span, "".to_string()));
-    // }
+fn suggest_inline(cx: &LateContext<'_>, expr_span: Span, changes: Vec<(Span, String)>) {
+    span_lint_and_then(
+        cx,
+        INLINE_FORMAT_ARGS,
+        expr_span,
+        "variables can be used directly in the `format!` string",
+        |diag| {
+            diag.multipart_suggestion("change this to", changes, Applicability::MachineApplicable);
+        },
+    );
+}
+
+fn check_inline(
+    cx: &LateContext<'_>,
+    arg: &FormatArg<'_>,
+    changes: &mut Option<Vec<(Span, String)>>,
+) {
+    if (arg.param.span.is_empty() || snippet(cx, arg.param.span, "").trim_end().is_empty())
+        && let ExprKind::Path(QPath::Resolved(None, path)) = arg.param.value.kind
+        && let Path { span, segments, .. } = path
+        && let [segment] = segments
+    {
+            let c = changes.get_or_insert_with(Vec::new);
+            c.push((arg.param.span, segment.ident.name.to_string()));
+            let arg_span = expand_past_previous_comma(cx, *span);
+            c.push((arg_span, "".to_string()));
+    }
 }
 
 fn outermost_expn_data(expn_data: ExpnData) -> ExpnData {
@@ -227,12 +255,18 @@ fn check_to_string_in_format_args(cx: &LateContext<'_>, name: Symbol, value: &Ex
     }
 }
 
-// Returns true if `hir_id` is referred to by multiple format params
+/// Returns true if `hir_id` is referred to by multiple format params
 fn is_aliased(args: &FormatArgsExpn<'_>, hir_id: HirId) -> bool {
     args.params()
         .filter(|param| param.value.hir_id == hir_id)
         .at_most_one()
         .is_err()
+}
+
+/// Returns true if the format string references any argument by its index (e.g. `{0}`, `{:1$}`, or `{:.2$}`)
+fn has_numbered(args: &FormatArgsExpn<'_>) -> bool {
+    // Note that CountIsStar is NOT a numbered case
+    args.params().any(|param| param.kind == FormatParamKind::Numbered)
 }
 
 fn count_needed_derefs<'tcx, I>(mut ty: Ty<'tcx>, mut iter: I) -> (usize, Ty<'tcx>)

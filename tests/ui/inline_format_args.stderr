@@ -1,62 +1,62 @@
 error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:23:5
    |
-LL |     println!("val='{}'", local_value);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+LL |     println!("val='{}'", local_i32);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
    = note: `-D clippy::inline-format-args` implied by `-D warnings`
 help: change this to
    |
-LL -     println!("val='{}'", local_value);
-LL +     println!("val='{local_value}'");
+LL -     println!("val='{}'", local_i32);
+LL +     println!("val='{local_i32}'");
    |
 
 error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:24:5
    |
-LL |     println!("val='{   }'", local_value);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+LL |     println!("val='{   }'", local_i32); // 3 spaces
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
 help: change this to
    |
-LL -     println!("val='{   }'", local_value);
-LL +     println!("val='{local_value}'");
+LL -     println!("val='{   }'", local_i32); // 3 spaces
+LL +     println!("val='{local_i32}'"); // 3 spaces
    |
 
 error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:25:5
    |
-LL |     println!("val='{    }'", local_value);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+LL |     println!("val='{    }'", local_i32); // tab
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
 help: change this to
    |
-LL -     println!("val='{    }'", local_value);
-LL +     println!("val='{local_value}'");
+LL -     println!("val='{    }'", local_i32); // tab
+LL +     println!("val='{local_i32}'"); // tab
    |
 
 error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:26:5
    |
-LL |     println!("val='{     }'", local_value);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+LL |     println!("val='{     }'", local_i32); // space+tab
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
 help: change this to
    |
-LL -     println!("val='{     }'", local_value);
-LL +     println!("val='{local_value}'");
+LL -     println!("val='{     }'", local_i32); // space+tab
+LL +     println!("val='{local_i32}'"); // space+tab
    |
 
 error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:27:5
    |
-LL |     println!("val='{     }'", local_value);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+LL |     println!("val='{     }'", local_i32); // tab+space
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
 help: change this to
    |
-LL -     println!("val='{     }'", local_value);
-LL +     println!("val='{local_value}'");
+LL -     println!("val='{     }'", local_i32); // tab+space
+LL +     println!("val='{local_i32}'"); // tab+space
    |
 
 error: variables can be used directly in the `format!` string
@@ -65,26 +65,26 @@ error: variables can be used directly in the `format!` string
 LL | /     println!(
 LL | |         "val='{
 LL | |     }'",
-LL | |         local_value
+LL | |         local_i32
 LL | |     );
    | |_____^
    |
 help: change this to
    |
 LL -         "val='{
-LL +         "val='{local_value}'"
+LL +         "val='{local_i32}'"
    |
 
 error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:33:5
    |
-LL |     println!("{}", local_value);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+LL |     println!("{}", local_i32);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^
    |
 help: change this to
    |
-LL -     println!("{}", local_value);
-LL +     println!("{local_value}");
+LL -     println!("{}", local_i32);
+LL +     println!("{local_i32}");
    |
 
 error: variables can be used directly in the `format!` string
@@ -102,125 +102,113 @@ LL +     println!("{fn_arg}");
 error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:35:5
    |
-LL |     println!("{:?}", local_value);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+LL |     println!("{:?}", local_i32);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
 help: change this to
    |
-LL -     println!("{:?}", local_value);
-LL +     println!("{local_value:?}");
+LL -     println!("{:?}", local_i32);
+LL +     println!("{local_i32:?}");
    |
 
 error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:36:5
    |
-LL |     println!("{:#?}", local_value);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+LL |     println!("{:#?}", local_i32);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
 help: change this to
    |
-LL -     println!("{:#?}", local_value);
-LL +     println!("{local_value:#?}");
+LL -     println!("{:#?}", local_i32);
+LL +     println!("{local_i32:#?}");
    |
 
 error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:37:5
    |
-LL |     println!("{:4}", local_value);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+LL |     println!("{:4}", local_i32);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
 help: change this to
    |
-LL -     println!("{:4}", local_value);
-LL +     println!("{local_value:4}");
+LL -     println!("{:4}", local_i32);
+LL +     println!("{local_i32:4}");
    |
 
 error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:38:5
    |
-LL |     println!("{:04}", local_value);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+LL |     println!("{:04}", local_i32);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
 help: change this to
    |
-LL -     println!("{:04}", local_value);
-LL +     println!("{local_value:04}");
+LL -     println!("{:04}", local_i32);
+LL +     println!("{local_i32:04}");
    |
 
 error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:39:5
    |
-LL |     println!("{:<3}", local_value);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+LL |     println!("{:<3}", local_i32);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
 help: change this to
    |
-LL -     println!("{:<3}", local_value);
-LL +     println!("{local_value:<3}");
+LL -     println!("{:<3}", local_i32);
+LL +     println!("{local_i32:<3}");
    |
 
 error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:40:5
    |
-LL |     println!("{:#010x}", local_value);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+LL |     println!("{:#010x}", local_i32);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
 help: change this to
    |
-LL -     println!("{:#010x}", local_value);
-LL +     println!("{local_value:#010x}");
+LL -     println!("{:#010x}", local_i32);
+LL +     println!("{local_i32:#010x}");
    |
 
 error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:41:5
    |
-LL |     println!("{:.1}", local_value2);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+LL |     println!("{:.1}", local_f64);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
 help: change this to
    |
-LL -     println!("{:.1}", local_value2);
-LL +     println!("{local_value2:.1}");
-   |
-
-error: variables can be used directly in the `format!` string
-  --> $DIR/inline_format_args.rs:42:5
-   |
-LL |     println!("Hello {} is {:.*}", "x", local_value, local_value2);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   |
-help: change this to
-   |
-LL -     println!("Hello {} is {:.*}", "x", local_value, local_value2);
-LL +     println!("Hello {} is {local_value2:.*}", "x", local_value);
-   |
-
-error: variables can be used directly in the `format!` string
-  --> $DIR/inline_format_args.rs:43:5
-   |
-LL |     println!("{} {}", local_value, local_value2);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   |
-help: change this to
-   |
-LL -     println!("{} {}", local_value, local_value2);
-LL +     println!("{local_value} {local_value2}");
-   |
-
-error: variables can be used directly in the `format!` string
-  --> $DIR/inline_format_args.rs:44:5
-   |
-LL |     println!("{}, {}", local_value, local_opt.unwrap());
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   |
-help: change this to
-   |
-LL -     println!("{}, {}", local_value, local_opt.unwrap());
-LL +     println!("{local_value}, {}", local_opt.unwrap());
+LL -     println!("{:.1}", local_f64);
+LL +     println!("{local_f64:.1}");
    |
 
 error: variables can be used directly in the `format!` string
   --> $DIR/inline_format_args.rs:45:5
+   |
+LL |     println!("{} {}", local_i32, local_f64);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: change this to
+   |
+LL -     println!("{} {}", local_i32, local_f64);
+LL +     println!("{local_i32} {local_f64}");
+   |
+
+error: variables can be used directly in the `format!` string
+  --> $DIR/inline_format_args.rs:46:5
+   |
+LL |     println!("{}, {}", local_i32, local_opt.unwrap());
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: change this to
+   |
+LL -     println!("{}, {}", local_i32, local_opt.unwrap());
+LL +     println!("{local_i32}, {}", local_opt.unwrap());
+   |
+
+error: variables can be used directly in the `format!` string
+  --> $DIR/inline_format_args.rs:47:5
    |
 LL |     println!("{}", val);
    |     ^^^^^^^^^^^^^^^^^^^
@@ -232,7 +220,7 @@ LL +     println!("{val}");
    |
 
 error: variables can be used directly in the `format!` string
-  --> $DIR/inline_format_args.rs:46:5
+  --> $DIR/inline_format_args.rs:48:5
    |
 LL |     println!("{}", v = val);
    |     ^^^^^^^^^^^^^^^^^^^^^^^
@@ -243,5 +231,53 @@ LL -     println!("{}", v = val);
 LL +     println!("{val}");
    |
 
-error: aborting due to 20 previous errors
+error: variables can be used directly in the `format!` string
+  --> $DIR/inline_format_args.rs:85:5
+   |
+LL |     println!("{:w$}", local_i32, w = width);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: change this to
+   |
+LL -     println!("{:w$}", local_i32, w = width);
+LL +     println!("{local_i32:w$}", w = width);
+   |
+
+error: variables can be used directly in the `format!` string
+  --> $DIR/inline_format_args.rs:89:5
+   |
+LL |     println!("{:.p$}", local_i32, p = prec);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: change this to
+   |
+LL -     println!("{:.p$}", local_i32, p = prec);
+LL +     println!("{local_i32:.p$}", p = prec);
+   |
+
+error: variables can be used directly in the `format!` string
+  --> $DIR/inline_format_args.rs:102:5
+   |
+LL |     println!("{:p$.w$}", local_i32, w = width, p = prec);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: change this to
+   |
+LL -     println!("{:p$.w$}", local_i32, w = width, p = prec);
+LL +     println!("{local_i32:p$.w$}", w = width, p = prec);
+   |
+
+error: variables can be used directly in the `format!` string
+  --> $DIR/inline_format_args.rs:104:20
+   |
+LL |     println!("{}", format!("{}", local_i32));
+   |                    ^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: change this to
+   |
+LL -     println!("{}", format!("{}", local_i32));
+LL +     println!("{}", format!("{local_i32}"));
+   |
+
+error: aborting due to 23 previous errors
 
