@@ -37,4 +37,3 @@ LL +     my_good_macro!("{local_i32}",);
    |
 
 error: aborting due to 3 previous errors
-
