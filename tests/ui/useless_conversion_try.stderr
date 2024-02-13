@@ -59,6 +59,20 @@ LL |     let _: String = format!("Hello {}", "world").try_into().unwrap();
    |
    = help: consider removing `.try_into()`
 
+error: literal with an empty format string
+  --> $DIR/useless_conversion_try.rs:38:41
+   |
+LL |     let _: String = format!("Hello {}", "world").try_into().unwrap();
+   |                                         ^^^^^^^
+   |
+   = note: `-D clippy::format-literal` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::format_literal)]`
+help: try
+   |
+LL -     let _: String = format!("Hello {}", "world").try_into().unwrap();
+LL +     let _: String = format!("Hello world").try_into().unwrap();
+   |
+
 error: useless conversion to the same type: `std::string::String`
   --> tests/ui/useless_conversion_try.rs:40:21
    |
@@ -75,5 +89,5 @@ LL |     let _: String = match String::from("_").try_into() {
    |
    = help: consider removing `.try_into()`
 
-error: aborting due to 9 previous errors
+error: aborting due to 10 previous errors
 

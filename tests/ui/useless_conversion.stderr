@@ -94,6 +94,20 @@ error: useless conversion to the same type: `std::string::String`
 LL |     let _: String = format!("Hello {}", "world").into();
    |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: consider removing `.into()`: `format!("Hello {}", "world")`
 
+error: literal with an empty format string
+  --> $DIR/useless_conversion.rs:138:41
+   |
+LL |     let _: String = format!("Hello {}", "world").into();
+   |                                         ^^^^^^^
+   |
+   = note: `-D clippy::format-literal` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::format_literal)]`
+help: try
+   |
+LL -     let _: String = format!("Hello {}", "world").into();
+LL +     let _: String = format!("Hello world").into();
+   |
+
 error: useless conversion to the same type: `i32`
   --> tests/ui/useless_conversion.rs:143:13
    |
@@ -226,5 +240,5 @@ note: this parameter accepts any `IntoIterator`, so you don't need to call `.int
 LL |                 J: IntoIterator,
    |                    ^^^^^^^^^^^^
 
-error: aborting due to 28 previous errors
+error: aborting due to 29 previous errors
 

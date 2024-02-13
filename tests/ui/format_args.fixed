@@ -100,10 +100,10 @@ fn main() {
     println!("{}", **x);
     println!("{}", ***x_ref);
     // https://github.com/rust-lang/rust-clippy/issues/7903
-    println!("{foo}{bar}", foo = "foo", bar = "bar");
-    println!("{foo}{bar}", foo = "foo", bar = "bar");
-    println!("{foo}{bar}", bar = "bar", foo = "foo");
-    println!("{foo}{bar}", bar = "bar", foo = "foo");
+    println!("{foo}bar", foo = "foo");
+    println!("foo{bar}", bar = "bar");
+    println!("foo{bar}", bar = "bar");
+    println!("{foo}bar", foo = "foo");
 
     // negative tests
     println!("error: something failed at {}", Somewhere.to_string());

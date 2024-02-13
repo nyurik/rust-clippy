@@ -12,9 +12,9 @@ fn main() {
     writeln!(v, "Hello");
     //~^ ERROR: using `write!()` with a format string that ends in a single newline
     //~| NOTE: `-D clippy::write-with-newline` implied by `-D warnings`
-    writeln!(v, "Hello {}", "world");
+    writeln!(v, "Hello world");
     //~^ ERROR: using `write!()` with a format string that ends in a single newline
-    writeln!(v, "Hello {} {}", "world", "#2");
+    writeln!(v, "Hello world #2");
     //~^ ERROR: using `write!()` with a format string that ends in a single newline
     writeln!(v, "{}", 1265);
     //~^ ERROR: using `write!()` with a format string that ends in a single newline
@@ -26,13 +26,13 @@ fn main() {
     write!(v, "Hello");
     writeln!(v, "Hello");
     writeln!(v, "Hello\n");
-    writeln!(v, "Hello {}\n", "world");
+    writeln!(v, "Hello world\n");
     write!(v, "Issue\n{}", 1265);
     write!(v, "{}", 1265);
     write!(v, "\n{}", 1275);
     write!(v, "\n\n");
     write!(v, "like eof\n\n");
-    write!(v, "Hello {} {}\n\n", "world", "#2");
+    write!(v, "Hello world #2\n\n");
     // #3126
     writeln!(v, "\ndon't\nwarn\nfor\nmultiple\nnewlines\n");
     // #3126

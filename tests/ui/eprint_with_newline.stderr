@@ -12,6 +12,20 @@ LL -     eprint!("Hello\n");
 LL +     eprintln!("Hello");
    |
 
+error: literal with an empty format string
+  --> $DIR/eprint_with_newline.rs:8:27
+   |
+LL |     eprint!("Hello {}\n", "world");
+   |                           ^^^^^^^
+   |
+   = note: `-D clippy::format-literal` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::format_literal)]`
+help: try
+   |
+LL -     eprint!("Hello {}\n", "world");
+LL +     eprint!("Hello world\n");
+   |
+
 error: using `eprint!()` with a format string that ends in a single newline
   --> tests/ui/eprint_with_newline.rs:8:5
    |
@@ -22,6 +36,18 @@ help: use `eprintln!` instead
    |
 LL -     eprint!("Hello {}\n", "world");
 LL +     eprintln!("Hello {}", "world");
+   |
+
+error: literal with an empty format string
+  --> $DIR/eprint_with_newline.rs:10:30
+   |
+LL |     eprint!("Hello {} {}\n", "world", "#2");
+   |                              ^^^^^^^^^^^^^
+   |
+help: try
+   |
+LL -     eprint!("Hello {} {}\n", "world", "#2");
+LL +     eprint!("Hello world #2\n");
    |
 
 error: using `eprint!()` with a format string that ends in a single newline
@@ -58,6 +84,30 @@ help: use `eprintln!` instead
    |
 LL -     eprint!("\n");
 LL +     eprintln!();
+   |
+
+error: literal with an empty format string
+  --> $DIR/eprint_with_newline.rs:22:29
+   |
+LL |     eprintln!("Hello {}\n", "world");
+   |                             ^^^^^^^
+   |
+help: try
+   |
+LL -     eprintln!("Hello {}\n", "world");
+LL +     eprintln!("Hello world\n");
+   |
+
+error: literal with an empty format string
+  --> $DIR/eprint_with_newline.rs:28:32
+   |
+LL |     eprint!("Hello {} {}\n\n", "world", "#2");
+   |                                ^^^^^^^^^^^^^
+   |
+help: try
+   |
+LL -     eprint!("Hello {} {}\n\n", "world", "#2");
+LL +     eprint!("Hello world #2\n\n");
    |
 
 error: using `eprint!()` with a format string that ends in a single newline
@@ -118,5 +168,5 @@ LL -     eprint!("\\r\n");
 LL +     eprintln!("\\r");
    |
 
-error: aborting due to 9 previous errors
+error: aborting due to 13 previous errors
 

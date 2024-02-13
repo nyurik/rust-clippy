@@ -125,18 +125,18 @@ fn main() {
 
     // assert with error messages
     assert_eq!("a".len(), 1, "tadam {}", 1);
-    assert_eq!("a".len(), 1, "tadam {}", true);
+    assert_eq!("a".len(), 1, "tadam true");
     assert!(!"a".is_empty(), "tadam {}", 1);
-    assert!(!"a".is_empty(), "tadam {}", true);
-    assert!(!"a".is_empty(), "tadam {}", true);
-    assert_eq!(a, true, "tadam {}", false);
+    assert!(!"a".is_empty(), "tadam true");
+    assert!(!"a".is_empty(), "tadam true");
+    assert_eq!(a, true, "tadam false");
 
     debug_assert_eq!("a".len(), 1, "tadam {}", 1);
-    debug_assert_eq!("a".len(), 1, "tadam {}", true);
+    debug_assert_eq!("a".len(), 1, "tadam true");
     debug_assert!(!"a".is_empty(), "tadam {}", 1);
-    debug_assert!(!"a".is_empty(), "tadam {}", true);
-    debug_assert!(!"a".is_empty(), "tadam {}", true);
-    debug_assert_eq!(a, true, "tadam {}", false);
+    debug_assert!(!"a".is_empty(), "tadam true");
+    debug_assert!(!"a".is_empty(), "tadam true");
+    debug_assert_eq!(a, true, "tadam false");
 
     assert!(a!());
     assert!(b!());

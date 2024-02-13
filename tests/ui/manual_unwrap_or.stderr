@@ -58,6 +58,20 @@ LL | |         None => "Alice",
 LL | |     };
    | |_____^ help: replace with: `Some("Bob").unwrap_or("Alice")`
 
+error: literal with an empty format string
+  --> $DIR/manual_unwrap_or.rs:79:36
+   |
+LL |         None => &format!("{} {}!", "hello", "world"),
+   |                                    ^^^^^^^^^^^^^^^^
+   |
+   = note: `-D clippy::format-literal` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::format_literal)]`
+help: try
+   |
+LL -         None => &format!("{} {}!", "hello", "world"),
+LL +         None => &format!("hello world!"),
+   |
+
 error: this pattern reimplements `Result::unwrap_or`
   --> tests/ui/manual_unwrap_or.rs:90:5
    |
@@ -152,5 +166,5 @@ LL | |             None => 0,
 LL | |         };
    | |_________^ help: replace with: `some_macro!().unwrap_or(0)`
 
-error: aborting due to 14 previous errors
+error: aborting due to 15 previous errors
 

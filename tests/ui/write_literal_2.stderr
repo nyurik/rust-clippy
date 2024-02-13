@@ -4,8 +4,8 @@ error: literal with an empty format string
 LL |     writeln!(v, "{}", "{hello}");
    |                       ^^^^^^^^^
    |
-   = note: `-D clippy::write-literal` implied by `-D warnings`
-   = help: to override `-D warnings` add `#[allow(clippy::write_literal)]`
+   = note: `-D clippy::format-literal` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::format_literal)]`
 help: try
    |
 LL -     writeln!(v, "{}", "{hello}");

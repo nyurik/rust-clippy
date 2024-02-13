@@ -19,6 +19,20 @@ error: `panic` should not be present in production code
 LL |     panic!("{} {}", "panic with", "multiple arguments");
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+error: literal with an empty format string
+  --> $DIR/panicking_macros.rs:28:21
+   |
+LL |     panic!("{} {}", "panic with", "multiple arguments");
+   |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `-D clippy::format-literal` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::format_literal)]`
+help: try
+   |
+LL -     panic!("{} {}", "panic with", "multiple arguments");
+LL +     panic!("panic with multiple arguments");
+   |
+
 error: `todo` should not be present in production code
   --> tests/ui/panicking_macros.rs:34:5
    |
@@ -106,5 +120,5 @@ error: usage of the `unreachable!` macro
 LL |     unreachable!();
    |     ^^^^^^^^^^^^^^
 
-error: aborting due to 16 previous errors
+error: aborting due to 17 previous errors
 

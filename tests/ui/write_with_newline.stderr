@@ -12,6 +12,20 @@ LL -     write!(v, "Hello\n");
 LL +     writeln!(v, "Hello");
    |
 
+error: literal with an empty format string
+  --> $DIR/write_with_newline.rs:15:29
+   |
+LL |     write!(v, "Hello {}\n", "world");
+   |                             ^^^^^^^
+   |
+   = note: `-D clippy::format-literal` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::format_literal)]`
+help: try
+   |
+LL -     write!(v, "Hello {}\n", "world");
+LL +     write!(v, "Hello world\n");
+   |
+
 error: using `write!()` with a format string that ends in a single newline
   --> tests/ui/write_with_newline.rs:15:5
    |
@@ -22,6 +36,18 @@ help: use `writeln!` instead
    |
 LL -     write!(v, "Hello {}\n", "world");
 LL +     writeln!(v, "Hello {}", "world");
+   |
+
+error: literal with an empty format string
+  --> $DIR/write_with_newline.rs:17:32
+   |
+LL |     write!(v, "Hello {} {}\n", "world", "#2");
+   |                                ^^^^^^^^^^^^^
+   |
+help: try
+   |
+LL -     write!(v, "Hello {} {}\n", "world", "#2");
+LL +     write!(v, "Hello world #2\n");
    |
 
 error: using `write!()` with a format string that ends in a single newline
@@ -58,6 +84,30 @@ help: use `writeln!` instead
    |
 LL -     write!(v, "\n");
 LL +     writeln!(v);
+   |
+
+error: literal with an empty format string
+  --> $DIR/write_with_newline.rs:29:31
+   |
+LL |     writeln!(v, "Hello {}\n", "world");
+   |                               ^^^^^^^
+   |
+help: try
+   |
+LL -     writeln!(v, "Hello {}\n", "world");
+LL +     writeln!(v, "Hello world\n");
+   |
+
+error: literal with an empty format string
+  --> $DIR/write_with_newline.rs:35:34
+   |
+LL |     write!(v, "Hello {} {}\n\n", "world", "#2");
+   |                                  ^^^^^^^^^^^^^
+   |
+help: try
+   |
+LL -     write!(v, "Hello {} {}\n\n", "world", "#2");
+LL +     write!(v, "Hello world #2\n\n");
    |
 
 error: using `write!()` with a format string that ends in a single newline
@@ -120,5 +170,5 @@ LL -     write!(v, "\\r\n");
 LL +     writeln!(v, "\\r");
    |
 
-error: aborting due to 9 previous errors
+error: aborting due to 13 previous errors
 

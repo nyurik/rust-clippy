@@ -178,6 +178,20 @@ LL -     println!("{:.1}", local_f64);
 LL +     println!("{local_f64:.1}");
    |
 
+error: literal with an empty format string
+  --> $DIR/uninlined_format_args.rs:64:35
+   |
+LL |     println!("Hello {} is {:.*}", "x", local_i32, local_f64);
+   |                                   ^^^
+   |
+   = note: `-D clippy::format-literal` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::format_literal)]`
+help: try
+   |
+LL -     println!("Hello {} is {:.*}", "x", local_i32, local_f64);
+LL +     println!("Hello x is {:.*}", local_i32, local_f64);
+   |
+
 error: variables can be used directly in the `format!` string
   --> tests/ui/uninlined_format_args.rs:67:5
    |
@@ -404,6 +418,18 @@ help: change this to
    |
 LL -     println!("{1} {0} {1} {0}", local_i32, local_f64);
 LL +     println!("{local_f64} {local_i32} {local_f64} {local_i32}");
+   |
+
+error: literal with an empty format string
+  --> $DIR/uninlined_format_args.rs:88:25
+   |
+LL |     println!("{1} {0}", "str", local_i32);
+   |                         ^^^^^
+   |
+help: try
+   |
+LL -     println!("{1} {0}", "str", local_i32);
+LL +     println!("{0} str", local_i32);
    |
 
 error: variables can be used directly in the `format!` string
@@ -845,5 +871,5 @@ LL -     println!("expand='{}'", local_i32);
 LL +     println!("expand='{local_i32}'");
    |
 
-error: aborting due to 71 previous errors
+error: aborting due to 73 previous errors
 

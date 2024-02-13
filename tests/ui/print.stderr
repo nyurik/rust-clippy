@@ -22,6 +22,20 @@ error: use of `print!`
 LL |     print!("Hello");
    |     ^^^^^^^^^^^^^^^
 
+error: literal with an empty format string
+  --> $DIR/print.rs:31:24
+   |
+LL |     print!("Hello {}", "World");
+   |                        ^^^^^^^
+   |
+   = note: `-D clippy::format-literal` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::format_literal)]`
+help: try
+   |
+LL -     print!("Hello {}", "World");
+LL +     print!("Hello World");
+   |
+
 error: use of `print!`
   --> tests/ui/print.rs:31:5
    |
@@ -52,5 +66,5 @@ error: use of `Debug`-based formatting
 LL |     print!("Hello {:#?}", "#orld");
    |                   ^^^^^
 
-error: aborting due to 8 previous errors
+error: aborting due to 9 previous errors
 

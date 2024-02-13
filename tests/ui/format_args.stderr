@@ -109,11 +109,37 @@ error: `to_string` applied to a type that implements `Display` in `println!` arg
 LL |     println!("{foo}{bar}", foo = "foo".to_string(), bar = "bar");
    |                                       ^^^^^^^^^^^^ help: remove this
 
+error: literal with an empty format string
+  --> $DIR/format_args.rs:103:59
+   |
+LL |     println!("{foo}{bar}", foo = "foo".to_string(), bar = "bar");
+   |                                                           ^^^^^
+   |
+   = note: `-D clippy::format-literal` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::format_literal)]`
+help: try
+   |
+LL -     println!("{foo}{bar}", foo = "foo".to_string(), bar = "bar");
+LL +     println!("{foo}bar", foo = "foo".to_string());
+   |
+
 error: `to_string` applied to a type that implements `Display` in `println!` args
   --> tests/ui/format_args.rs:104:52
    |
 LL |     println!("{foo}{bar}", foo = "foo", bar = "bar".to_string());
    |                                                    ^^^^^^^^^^^^ help: remove this
+
+error: literal with an empty format string
+  --> $DIR/format_args.rs:104:34
+   |
+LL |     println!("{foo}{bar}", foo = "foo", bar = "bar".to_string());
+   |                                  ^^^^^
+   |
+help: try
+   |
+LL -     println!("{foo}{bar}", foo = "foo", bar = "bar".to_string());
+LL +     println!("foo{bar}", bar = "bar".to_string());
+   |
 
 error: `to_string` applied to a type that implements `Display` in `println!` args
   --> tests/ui/format_args.rs:105:39
@@ -121,11 +147,35 @@ error: `to_string` applied to a type that implements `Display` in `println!` arg
 LL |     println!("{foo}{bar}", bar = "bar".to_string(), foo = "foo");
    |                                       ^^^^^^^^^^^^ help: remove this
 
+error: literal with an empty format string
+  --> $DIR/format_args.rs:105:59
+   |
+LL |     println!("{foo}{bar}", bar = "bar".to_string(), foo = "foo");
+   |                                                           ^^^^^
+   |
+help: try
+   |
+LL -     println!("{foo}{bar}", bar = "bar".to_string(), foo = "foo");
+LL +     println!("foo{bar}", bar = "bar".to_string());
+   |
+
 error: `to_string` applied to a type that implements `Display` in `println!` args
   --> tests/ui/format_args.rs:106:52
    |
 LL |     println!("{foo}{bar}", bar = "bar", foo = "foo".to_string());
    |                                                    ^^^^^^^^^^^^ help: remove this
+
+error: literal with an empty format string
+  --> $DIR/format_args.rs:106:34
+   |
+LL |     println!("{foo}{bar}", bar = "bar", foo = "foo".to_string());
+   |                                  ^^^^^
+   |
+help: try
+   |
+LL -     println!("{foo}{bar}", bar = "bar", foo = "foo".to_string());
+LL +     println!("{foo}bar", foo = "foo".to_string());
+   |
 
 error: `to_string` applied to a type that implements `Display` in `print!` args
   --> tests/ui/format_args.rs:118:37
@@ -151,5 +201,5 @@ error: `to_string` applied to a type that implements `Display` in `println!` arg
 LL |         println!("{}", original[..10].to_string());
    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^ help: use this: `&original[..10]`
 
-error: aborting due to 25 previous errors
+error: aborting due to 29 previous errors
 

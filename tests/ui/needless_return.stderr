@@ -482,6 +482,20 @@ LL -     return format!("Hello {}", "world!");
 LL +     format!("Hello {}", "world!")
    |
 
+error: literal with an empty format string
+  --> $DIR/needless_return.rs:237:32
+   |
+LL |     return format!("Hello {}", "world!");
+   |                                ^^^^^^^^
+   |
+   = note: `-D clippy::format-literal` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::format_literal)]`
+help: try
+   |
+LL -     return format!("Hello {}", "world!");
+LL +     return format!("Hello world!");
+   |
+
 error: unneeded `return` statement
   --> tests/ui/needless_return.rs:249:9
    |
@@ -653,5 +667,5 @@ LL -         return if b1 { 0 } else { 1 } | if b2 { 2 } else { 3 } | if b3 { 4 
 LL +         (if b1 { 0 } else { 1 } | if b2 { 2 } else { 3 } | if b3 { 4 } else { 5 })
    |
 
-error: aborting due to 52 previous errors
+error: aborting due to 53 previous errors
 

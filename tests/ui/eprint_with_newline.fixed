@@ -5,9 +5,9 @@ fn main() {
     eprintln!("Hello");
     //~^ ERROR: using `eprint!()` with a format string that ends in a single newline
     //~| NOTE: `-D clippy::print-with-newline` implied by `-D warnings`
-    eprintln!("Hello {}", "world");
+    eprintln!("Hello world");
     //~^ ERROR: using `eprint!()` with a format string that ends in a single newline
-    eprintln!("Hello {} {}", "world", "#2");
+    eprintln!("Hello world #2");
     //~^ ERROR: using `eprint!()` with a format string that ends in a single newline
     eprintln!("{}", 1265);
     //~^ ERROR: using `eprint!()` with a format string that ends in a single newline
@@ -19,13 +19,13 @@ fn main() {
     eprint!("Hello");
     eprintln!("Hello");
     eprintln!("Hello\n");
-    eprintln!("Hello {}\n", "world");
+    eprintln!("Hello world\n");
     eprint!("Issue\n{}", 1265);
     eprint!("{}", 1265);
     eprint!("\n{}", 1275);
     eprint!("\n\n");
     eprint!("like eof\n\n");
-    eprint!("Hello {} {}\n\n", "world", "#2");
+    eprint!("Hello world #2\n\n");
     // #3126
     eprintln!("\ndon't\nwarn\nfor\nmultiple\nnewlines\n");
     // #3126

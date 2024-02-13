@@ -192,6 +192,20 @@ LL -     debug_assert_ne!(b, true);
 LL +     debug_assert!(!b);
    |
 
+error: literal with an empty format string
+  --> $DIR/bool_assert_comparison.rs:128:42
+   |
+LL |     assert_eq!("a".len(), 1, "tadam {}", true);
+   |                                          ^^^^
+   |
+   = note: `-D clippy::format-literal` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::format_literal)]`
+help: try
+   |
+LL -     assert_eq!("a".len(), 1, "tadam {}", true);
+LL +     assert_eq!("a".len(), 1, "tadam true");
+   |
+
 error: used `assert_eq!` with a literal bool
   --> tests/ui/bool_assert_comparison.rs:129:5
    |
@@ -216,6 +230,18 @@ LL -     assert_eq!("a".is_empty(), false, "tadam {}", true);
 LL +     assert!(!"a".is_empty(), "tadam {}", true);
    |
 
+error: literal with an empty format string
+  --> $DIR/bool_assert_comparison.rs:130:51
+   |
+LL |     assert_eq!("a".is_empty(), false, "tadam {}", true);
+   |                                                   ^^^^
+   |
+help: try
+   |
+LL -     assert_eq!("a".is_empty(), false, "tadam {}", true);
+LL +     assert_eq!("a".is_empty(), false, "tadam true");
+   |
+
 error: used `assert_eq!` with a literal bool
   --> tests/ui/bool_assert_comparison.rs:131:5
    |
@@ -226,6 +252,42 @@ help: replace it with `assert!(..)`
    |
 LL -     assert_eq!(false, "a".is_empty(), "tadam {}", true);
 LL +     assert!(!"a".is_empty(), "tadam {}", true);
+   |
+
+error: literal with an empty format string
+  --> $DIR/bool_assert_comparison.rs:131:51
+   |
+LL |     assert_eq!(false, "a".is_empty(), "tadam {}", true);
+   |                                                   ^^^^
+   |
+help: try
+   |
+LL -     assert_eq!(false, "a".is_empty(), "tadam {}", true);
+LL +     assert_eq!(false, "a".is_empty(), "tadam true");
+   |
+
+error: literal with an empty format string
+  --> $DIR/bool_assert_comparison.rs:132:37
+   |
+LL |     assert_eq!(a, true, "tadam {}", false);
+   |                                     ^^^^^
+   |
+help: try
+   |
+LL -     assert_eq!(a, true, "tadam {}", false);
+LL +     assert_eq!(a, true, "tadam false");
+   |
+
+error: literal with an empty format string
+  --> $DIR/bool_assert_comparison.rs:135:48
+   |
+LL |     debug_assert_eq!("a".len(), 1, "tadam {}", true);
+   |                                                ^^^^
+   |
+help: try
+   |
+LL -     debug_assert_eq!("a".len(), 1, "tadam {}", true);
+LL +     debug_assert_eq!("a".len(), 1, "tadam true");
    |
 
 error: used `debug_assert_eq!` with a literal bool
@@ -252,6 +314,18 @@ LL -     debug_assert_eq!("a".is_empty(), false, "tadam {}", true);
 LL +     debug_assert!(!"a".is_empty(), "tadam {}", true);
    |
 
+error: literal with an empty format string
+  --> $DIR/bool_assert_comparison.rs:137:57
+   |
+LL |     debug_assert_eq!("a".is_empty(), false, "tadam {}", true);
+   |                                                         ^^^^
+   |
+help: try
+   |
+LL -     debug_assert_eq!("a".is_empty(), false, "tadam {}", true);
+LL +     debug_assert_eq!("a".is_empty(), false, "tadam true");
+   |
+
 error: used `debug_assert_eq!` with a literal bool
   --> tests/ui/bool_assert_comparison.rs:138:5
    |
@@ -262,6 +336,30 @@ help: replace it with `debug_assert!(..)`
    |
 LL -     debug_assert_eq!(false, "a".is_empty(), "tadam {}", true);
 LL +     debug_assert!(!"a".is_empty(), "tadam {}", true);
+   |
+
+error: literal with an empty format string
+  --> $DIR/bool_assert_comparison.rs:138:57
+   |
+LL |     debug_assert_eq!(false, "a".is_empty(), "tadam {}", true);
+   |                                                         ^^^^
+   |
+help: try
+   |
+LL -     debug_assert_eq!(false, "a".is_empty(), "tadam {}", true);
+LL +     debug_assert_eq!(false, "a".is_empty(), "tadam true");
+   |
+
+error: literal with an empty format string
+  --> $DIR/bool_assert_comparison.rs:139:43
+   |
+LL |     debug_assert_eq!(a, true, "tadam {}", false);
+   |                                           ^^^^^
+   |
+help: try
+   |
+LL -     debug_assert_eq!(a, true, "tadam {}", false);
+LL +     debug_assert_eq!(a, true, "tadam false");
    |
 
 error: used `assert_eq!` with a literal bool
@@ -396,5 +494,5 @@ LL -     debug_assert_eq!("requires negation".is_empty(), false);
 LL +     debug_assert!(!"requires negation".is_empty());
    |
 
-error: aborting due to 33 previous errors
+error: aborting due to 41 previous errors
 

@@ -151,11 +151,37 @@ error: do not call a function with mutable arguments inside of `debug_assert!`
 LL |     debug_assert!(bool_mut(&mut 3), "w/o format");
    |                   ^^^^^^^^^^^^^^^^
 
+error: literal with an empty format string
+  --> $DIR/debug_assert_with_mut_call.rs:127:46
+   |
+LL |     debug_assert!(bool_ref(&3), "{} format", "w/");
+   |                                              ^^^^
+   |
+   = note: `-D clippy::format-literal` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::format_literal)]`
+help: try
+   |
+LL -     debug_assert!(bool_ref(&3), "{} format", "w/");
+LL +     debug_assert!(bool_ref(&3), "w/ format");
+   |
+
 error: do not call a function with mutable arguments inside of `debug_assert!`
   --> tests/ui/debug_assert_with_mut_call.rs:128:19
    |
 LL |     debug_assert!(bool_mut(&mut 3), "{} format", "w/");
    |                   ^^^^^^^^^^^^^^^^
+
+error: literal with an empty format string
+  --> $DIR/debug_assert_with_mut_call.rs:128:50
+   |
+LL |     debug_assert!(bool_mut(&mut 3), "{} format", "w/");
+   |                                                  ^^^^
+   |
+help: try
+   |
+LL -     debug_assert!(bool_mut(&mut 3), "{} format", "w/");
+LL +     debug_assert!(bool_mut(&mut 3), "w/ format");
+   |
 
 error: do not call a function with mutable arguments inside of `debug_assert!`
   --> tests/ui/debug_assert_with_mut_call.rs:134:9
@@ -169,5 +195,5 @@ error: do not call a function with mutable arguments inside of `debug_assert!`
 LL |         bool_mut(&mut x);
    |         ^^^^^^^^^^^^^^^^
 
-error: aborting due to 28 previous errors
+error: aborting due to 30 previous errors
 

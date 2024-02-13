@@ -66,7 +66,7 @@ fn option_unwrap_or() {
     let option: Option<&str> = None;
     match option {
         Some(s) => s,
-        None => &format!("{} {}!", "hello", "world"),
+        None => &format!("hello world!"),
     };
 }
 

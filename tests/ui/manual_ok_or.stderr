@@ -47,5 +47,19 @@ LL +         "{}{}{}{}{}{}{}",
 LL ~         "Alice", "Bob", "Sarah", "Marc", "Sandra", "Eric", "Jenifer"));
    |
 
-error: aborting due to 5 previous errors
+error: literal with an empty format string
+  --> $DIR/manual_ok_or.rs:24:13
+   |
+LL |             "Alice", "Bob", "Sarah", "Marc", "Sandra", "Eric", "Jenifer")
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `-D clippy::format-literal` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::format_literal)]`
+help: try
+   |
+LL -             "{}{}{}{}{}{}{}",
+LL +             "AliceBobSarahMarcSandraEricJenifer")
+   |
+
+error: aborting due to 6 previous errors
 

@@ -46,11 +46,73 @@ error: useless use of `format!`
 LL |     format!("{}", "foo");
    |     ^^^^^^^^^^^^^^^^^^^^ help: consider using `.to_string()`: `"foo".to_string()`
 
+error: literal with an empty format string
+  --> $DIR/format.rs:29:19
+   |
+LL |     format!("{}", "foo");
+   |                   ^^^^^
+   |
+   = note: `-D clippy::format-literal` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::format_literal)]`
+help: try
+   |
+LL -     format!("{}", "foo");
+LL +     format!("foo");
+   |
+
+error: literal with an empty format string
+  --> $DIR/format.rs:33:23
+   |
+LL |     format!("foo {}", "bar");
+   |                       ^^^^^
+   |
+help: try
+   |
+LL -     format!("foo {}", "bar");
+LL +     format!("foo bar");
+   |
+
+error: literal with an empty format string
+  --> $DIR/format.rs:34:23
+   |
+LL |     format!("{} bar", "foo");
+   |                       ^^^^^
+   |
+help: try
+   |
+LL -     format!("{} bar", "foo");
+LL +     format!("foo bar");
+   |
+
 error: useless use of `format!`
   --> tests/ui/format.rs:37:5
    |
 LL |     format!("{}", arg);
    |     ^^^^^^^^^^^^^^^^^^ help: consider using `.to_string()`: `arg.to_string()`
+
+error: literal with an empty format string
+  --> $DIR/format.rs:53:20
+   |
+LL |     println!("{}", "foo");
+   |                    ^^^^^
+   |
+help: try
+   |
+LL -     println!("{}", "foo");
+LL +     println!("foo");
+   |
+
+error: literal with an empty format string
+  --> $DIR/format.rs:54:24
+   |
+LL |     println!("foo {}", "foo");
+   |                        ^^^^^
+   |
+help: try
+   |
+LL -     println!("foo {}", "foo");
+LL +     println!("foo foo");
+   |
 
 error: useless use of `format!`
   --> tests/ui/format.rs:67:5
@@ -100,5 +162,5 @@ error: useless use of `format!`
 LL |     let _ = format!("{xx}");
    |             ^^^^^^^^^^^^^^^ help: consider using `.to_string()`: `xx.to_string()`
 
-error: aborting due to 15 previous errors
+error: aborting due to 20 previous errors
 

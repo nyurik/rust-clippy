@@ -1,17 +1,13 @@
 use clippy_utils::diagnostics::{span_lint, span_lint_and_then};
-use clippy_utils::macros::{format_arg_removal_span, root_macro_call_first_node, FormatArgsStorage, MacroCall};
+use clippy_utils::macros::{root_macro_call_first_node, FormatArgsStorage, MacroCall};
 use clippy_utils::source::{expand_past_previous_comma, snippet_opt};
 use clippy_utils::{is_in_cfg_test, is_in_test_function};
-use rustc_ast::token::LitKind;
-use rustc_ast::{
-    FormatArgPosition, FormatArgPositionKind, FormatArgs, FormatArgsPiece, FormatOptions, FormatPlaceholder,
-    FormatTrait,
-};
+use rustc_ast::{FormatArgs, FormatArgsPiece, FormatPlaceholder, FormatTrait};
 use rustc_errors::Applicability;
 use rustc_hir::{Expr, Impl, Item, ItemKind};
 use rustc_lint::{LateContext, LateLintPass, LintContext};
 use rustc_session::impl_lint_pass;
-use rustc_span::{sym, BytePos, Span};
+use rustc_span::{sym, BytePos};
 
 declare_clippy_lint! {
     /// ### What it does
@@ -130,29 +126,6 @@ declare_clippy_lint! {
 
 declare_clippy_lint! {
     /// ### What it does
-    /// This lint warns about the use of literals as `print!`/`println!` args.
-    ///
-    /// ### Why is this bad?
-    /// Using literals as `println!` args is inefficient
-    /// (c.f., https://github.com/matthiaskrgr/rust-str-bench) and unnecessary
-    /// (i.e., just put the literal in the format string)
-    ///
-    /// ### Example
-    /// ```no_run
-    /// println!("{}", "foo");
-    /// ```
-    /// use the literal without formatting:
-    /// ```no_run
-    /// println!("foo");
-    /// ```
-    #[clippy::version = "pre 1.29.0"]
-    pub PRINT_LITERAL,
-    style,
-    "printing a literal with a format string"
-}
-
-declare_clippy_lint! {
-    /// ### What it does
     /// This lint warns when you use `writeln!(buf, "")` to
     /// print a newline.
     ///
@@ -209,34 +182,6 @@ declare_clippy_lint! {
     "using `write!()` with a format string that ends in a single newline"
 }
 
-declare_clippy_lint! {
-    /// ### What it does
-    /// This lint warns about the use of literals as `write!`/`writeln!` args.
-    ///
-    /// ### Why is this bad?
-    /// Using literals as `writeln!` args is inefficient
-    /// (c.f., https://github.com/matthiaskrgr/rust-str-bench) and unnecessary
-    /// (i.e., just put the literal in the format string)
-    ///
-    /// ### Example
-    /// ```no_run
-    /// # use std::fmt::Write;
-    /// # let mut buf = String::new();
-    /// writeln!(buf, "{}", "foo");
-    /// ```
-    ///
-    /// Use instead:
-    /// ```no_run
-    /// # use std::fmt::Write;
-    /// # let mut buf = String::new();
-    /// writeln!(buf, "foo");
-    /// ```
-    #[clippy::version = "pre 1.29.0"]
-    pub WRITE_LITERAL,
-    style,
-    "writing a literal with a format string"
-}
-
 #[derive(Default)]
 pub struct Write {
     format_args: FormatArgsStorage,
@@ -260,10 +205,8 @@ impl_lint_pass!(Write => [
     PRINT_STDOUT,
     PRINT_STDERR,
     USE_DEBUG,
-    PRINT_LITERAL,
     WRITE_WITH_NEWLINE,
     WRITELN_EMPTY_STRING,
-    WRITE_LITERAL,
 ]);
 
 impl<'tcx> LateLintPass<'tcx> for Write {
@@ -327,8 +270,6 @@ impl<'tcx> LateLintPass<'tcx> for Write {
                 },
                 _ => {},
             }
-
-            check_literal(cx, format_args, name);
 
             if !self.in_debug_impl {
                 for piece in &format_args.template {
@@ -456,234 +397,4 @@ fn check_empty_string(cx: &LateContext<'_>, format_args: &FormatArgs, macro_call
             },
         );
     }
-}
-
-fn check_literal(cx: &LateContext<'_>, format_args: &FormatArgs, name: &str) {
-    let arg_index = |argument: &FormatArgPosition| argument.index.unwrap_or_else(|pos| pos);
-
-    let lint_name = if name.starts_with("write") {
-        WRITE_LITERAL
-    } else {
-        PRINT_LITERAL
-    };
-
-    let mut counts = vec![0u32; format_args.arguments.all_args().len()];
-    for piece in &format_args.template {
-        if let FormatArgsPiece::Placeholder(placeholder) = piece {
-            counts[arg_index(&placeholder.argument)] += 1;
-        }
-    }
-
-    let mut suggestion: Vec<(Span, String)> = vec![];
-    // holds index of replaced positional arguments; used to decrement the index of the remaining
-    // positional arguments.
-    let mut replaced_position: Vec<usize> = vec![];
-    let mut sug_span: Option<Span> = None;
-
-    for piece in &format_args.template {
-        if let FormatArgsPiece::Placeholder(FormatPlaceholder {
-            argument,
-            span: Some(placeholder_span),
-            format_trait: FormatTrait::Display,
-            format_options,
-        }) = piece
-            && *format_options == FormatOptions::default()
-            && let index = arg_index(argument)
-            && counts[index] == 1
-            && let Some(arg) = format_args.arguments.by_index(index)
-            && let rustc_ast::ExprKind::Lit(lit) = &arg.expr.kind
-            && !arg.expr.span.from_expansion()
-            && let Some(value_string) = snippet_opt(cx, arg.expr.span)
-        {
-            let (replacement, replace_raw) = match lit.kind {
-                LitKind::Str | LitKind::StrRaw(_) => match extract_str_literal(&value_string) {
-                    Some(extracted) => extracted,
-                    None => return,
-                },
-                LitKind::Char => (
-                    match lit.symbol.as_str() {
-                        "\"" => "\\\"",
-                        "\\'" => "'",
-                        _ => match value_string.strip_prefix('\'').and_then(|s| s.strip_suffix('\'')) {
-                            Some(stripped) => stripped,
-                            None => return,
-                        },
-                    }
-                    .to_string(),
-                    false,
-                ),
-                LitKind::Bool => (lit.symbol.to_string(), false),
-                _ => continue,
-            };
-
-            let Some(format_string_snippet) = snippet_opt(cx, format_args.span) else {
-                continue;
-            };
-            let format_string_is_raw = format_string_snippet.starts_with('r');
-
-            let replacement = match (format_string_is_raw, replace_raw) {
-                (false, false) => Some(replacement),
-                (false, true) => Some(replacement.replace('"', "\\\"").replace('\\', "\\\\")),
-                (true, false) => match conservative_unescape(&replacement) {
-                    Ok(unescaped) => Some(unescaped),
-                    Err(UnescapeErr::Lint) => None,
-                    Err(UnescapeErr::Ignore) => continue,
-                },
-                (true, true) => {
-                    if replacement.contains(['#', '"']) {
-                        None
-                    } else {
-                        Some(replacement)
-                    }
-                },
-            };
-
-            sug_span = Some(sug_span.unwrap_or(arg.expr.span).to(arg.expr.span));
-
-            if let Some((_, index)) = positional_arg_piece_span(piece) {
-                replaced_position.push(index);
-            }
-
-            if let Some(replacement) = replacement
-                // `format!("{}", "a")`, `format!("{named}", named = "b")
-                //              ~~~~~                      ~~~~~~~~~~~~~
-                && let Some(removal_span) = format_arg_removal_span(format_args, index)
-            {
-                let replacement = escape_braces(&replacement, !format_string_is_raw && !replace_raw);
-                suggestion.push((*placeholder_span, replacement));
-                suggestion.push((removal_span, String::new()));
-            }
-        }
-    }
-
-    // Decrement the index of the remaining by the number of replaced positional arguments
-    if !suggestion.is_empty() {
-        for piece in &format_args.template {
-            if let Some((span, index)) = positional_arg_piece_span(piece)
-                && suggestion.iter().all(|(s, _)| *s != span)
-            {
-                let decrement = replaced_position.iter().filter(|i| **i < index).count();
-                suggestion.push((span, format!("{{{}}}", index.saturating_sub(decrement))));
-            }
-        }
-    }
-
-    if let Some(span) = sug_span {
-        span_lint_and_then(cx, lint_name, span, "literal with an empty format string", |diag| {
-            if !suggestion.is_empty() {
-                diag.multipart_suggestion("try", suggestion, Applicability::MachineApplicable);
-            }
-        });
-    }
-}
-
-/// Extract Span and its index from the given `piece`, iff it's positional argument.
-fn positional_arg_piece_span(piece: &FormatArgsPiece) -> Option<(Span, usize)> {
-    match piece {
-        FormatArgsPiece::Placeholder(FormatPlaceholder {
-            argument:
-                FormatArgPosition {
-                    index: Ok(index),
-                    kind: FormatArgPositionKind::Number,
-                    ..
-                },
-            span: Some(span),
-            ..
-        }) => Some((*span, *index)),
-        _ => None,
-    }
-}
-
-/// Removes the raw marker, `#`s and quotes from a str, and returns if the literal is raw
-///
-/// `r#"a"#` -> (`a`, true)
-///
-/// `"b"` -> (`b`, false)
-fn extract_str_literal(literal: &str) -> Option<(String, bool)> {
-    let (literal, raw) = match literal.strip_prefix('r') {
-        Some(stripped) => (stripped.trim_matches('#'), true),
-        None => (literal, false),
-    };
-
-    Some((literal.strip_prefix('"')?.strip_suffix('"')?.to_string(), raw))
-}
-
-enum UnescapeErr {
-    /// Should still be linted, can be manually resolved by author, e.g.
-    ///
-    /// ```ignore
-    /// print!(r"{}", '"');
-    /// ```
-    Lint,
-    /// Should not be linted, e.g.
-    ///
-    /// ```ignore
-    /// print!(r"{}", '\r');
-    /// ```
-    Ignore,
-}
-
-/// Unescape a normal string into a raw string
-fn conservative_unescape(literal: &str) -> Result<String, UnescapeErr> {
-    let mut unescaped = String::with_capacity(literal.len());
-    let mut chars = literal.chars();
-    let mut err = false;
-
-    while let Some(ch) = chars.next() {
-        match ch {
-            '#' => err = true,
-            '\\' => match chars.next() {
-                Some('\\') => unescaped.push('\\'),
-                Some('"') => err = true,
-                _ => return Err(UnescapeErr::Ignore),
-            },
-            _ => unescaped.push(ch),
-        }
-    }
-
-    if err { Err(UnescapeErr::Lint) } else { Ok(unescaped) }
-}
-
-/// Replaces `{` with `{{` and `}` with `}}`. If `preserve_unicode_escapes` is `true` the braces in
-/// `\u{xxxx}` are left unmodified
-#[expect(clippy::match_same_arms)]
-fn escape_braces(literal: &str, preserve_unicode_escapes: bool) -> String {
-    #[derive(Clone, Copy)]
-    enum State {
-        Normal,
-        Backslash,
-        UnicodeEscape,
-    }
-
-    let mut escaped = String::with_capacity(literal.len());
-    let mut state = State::Normal;
-
-    for ch in literal.chars() {
-        state = match (ch, state) {
-            // Escape braces outside of unicode escapes by doubling them up
-            ('{' | '}', State::Normal) => {
-                escaped.push(ch);
-                State::Normal
-            },
-            // If `preserve_unicode_escapes` isn't enabled stay in `State::Normal`, otherwise:
-            //
-            // \u{aaaa} \\ \x01
-            // ^        ^  ^
-            ('\\', State::Normal) if preserve_unicode_escapes => State::Backslash,
-            // \u{aaaa}
-            //  ^
-            ('u', State::Backslash) => State::UnicodeEscape,
-            // \xAA \\
-            //  ^    ^
-            (_, State::Backslash) => State::Normal,
-            // \u{aaaa}
-            //        ^
-            ('}', State::UnicodeEscape) => State::Normal,
-            _ => state,
-        };
-
-        escaped.push(ch);
-    }
-
-    escaped
 }
