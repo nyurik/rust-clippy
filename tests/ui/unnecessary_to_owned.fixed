@@ -6,7 +6,7 @@
     clippy::needless_lifetimes
 )]
 #![warn(clippy::unnecessary_to_owned, clippy::redundant_clone)]
-
+#![allow(clippy::uninlined_format_args)]
 use std::borrow::Cow;
 use std::ffi::{CStr, CString, OsStr, OsString};
 use std::ops::Deref;
